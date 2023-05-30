@@ -1,4 +1,4 @@
-import React from 'react';
+import React, {useState} from 'react';
 
 import {
   StyleSheet,
@@ -8,14 +8,29 @@ import {
   Button,
   TouchableHighlight,
 } from 'react-native';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 
 const App = () => {
+  const [inputTexto, guardarInputTexto] = useState('');
+
+  const guardarDatos = async () => {
+    try {
+      await AsyncStorage.setItem('nombre', inputTexto);
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
   return (
     <>
       <View style={styles.contenedor}>
-        <TextInput placeholder="Escribe tu Nombre" style={styles.input} />
+        <TextInput
+          onChangeText={texto => guardarInputTexto(texto)}
+          placeholder="Escribe tu Nombre"
+          style={styles.input}
+        />
 
-        <Button title="Guardar" color="#333" />
+        <Button title="Guardar" color="#333" onPress={() => guardarDatos()} />
 
         <TouchableHighlight style={styles.btnEliminar}>
           <Text style={styles.textoEliminar}>Eliminar Nombre &times;</Text>
